@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap" rel="stylesheet">
-    <title>SOS</title>
+    <title>Cadastro de SOS</title>
 </head>
 
 <body>
@@ -17,15 +17,9 @@
     <div id="coisa">
         <main>
             <div class="conteiner">
-                <h2>SOS</h2>
-                <p>Você autoriza a utilização do serviço de GPS do seu dispositivo?</p>
-                <form action="webcomponents/login/component.ts" method="post" id="form-validar">
-                    <a href="confirm-sos.html"><input id="btn" type="button" onclick="return localgps()" name="go"
-                            value="SIM"></a>
-                    <a href="sos-manual.html"><button>NÃO</button></a>
-                </form>
+                <h2 id="confirm">SOS enviado com sucesso! As autoridades já estão a caminho.</h2>
+                <a href="usuario-0.html" id="confirm"><button id="confirm">Continuar >></button></a>
             </div>
-
         </main>
     </div>
 </body>
