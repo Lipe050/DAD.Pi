@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="main.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap" rel="stylesheet">
+    <title>Listagem de Cidade</title>
+</head>
+
+<body>
+    <div id="show-page">
+        <h1>Dangerous Animals Detector</h1>
+    </div>
+    <div id="coisa">
+        <main>
+            <div class="conteiner">
+                <h2>Cadastro</h2>
+                <p>Insira seus dados para se cadastrar na plataforma.</p>
+                <form action="webcomponents/login/component.ts" method="post" id="form-cadastro">
+                    <select name="estados-brasil">
+                        <option value="Estado">Estado</option>
+                        <option value="AC">Acre</option>
+                        <option value="AL">Alagoas</option>
+                        <option value="AP">Amapá</option>
+                        <option value="AM">Amazonas</option>
+                        <option value="BA">Bahia</option>
+                        <option value="CE">Ceará</option>
+                        <option value="DF">Distrito Federal</option>
+                        <option value="ES">Espírito Santo</option>
+                        <option value="GO">Goiás</option>
+                        <option value="MA">Maranhão</option>
+                        <option value="MT">Mato Grosso</option>
+                        <option value="MS">Mato Grosso do Sul</option>
+                        <option value="MG">Minas Gerais</option>
+                        <option value="PA">Pará</option>
+                        <option value="PB">Paraíba</option>
+                        <option value="PR">Paraná</option>
+                        <option value="PE">Pernambuco</option>
+                        <option value="PI">Piauí</option>
+                        <option value="RJ">Rio de Janeiro</option>
+                        <option value="RN">Rio Grande do Norte</option>
+                        <option value="RS">Rio Grande do Sul</option>
+                        <option value="RO">Rondônia</option>
+                        <option value="RR">Roraima</option>
+                        <option value="SC">Santa Catarina</option>
+                        <option value="SP">São Paulo</option>
+                        <option value="SE">Sergipe</option>
+                        <option value="TO">Tocantins</option>
+                    </select>
+                    <select class="cidade" name="idcidade">
+                        <option value="">Selecione o estado primeiro</option>
+                    </select>
+                    <!--a href="confirmacao-cadastro.html"--><input id="btn" type="button"
+                        onclick="return excluircidade()" name="go" value="Excluir">
+                    <!--/a-->
+                </form>
+            </div>
+
+        </main>
+    </div>
+    <script>
+        const selectEstado = document.querySelector("[name='estados-brasil']")
+        const selectCidade = document.querySelector("[name='idcidade']")
+
+        selectEstado.addEventListener("change", async ev => {
+            const uf = selectEstado.options[selectEstado.selectedIndex].value
+            const request = await fetch("/cidades/" + uf)
+            const data = await request.json()
+
+            if (!data.length) {
+                selectCidade.innerHTML = '<option value="">Nenhuma cidade encontrada para este estado</option>'
+                return
+            }
+
+            let strHtmlCidades = ""
+            data.forEach(cidade => {
+                strHtmlCidades += `<option value="${cidade.idCIDADE}">${cidade.nome}</option>`
+            });
+            selectCidade.innerHTML = strHtmlCidades
+        })
+
+        async function excluircidade() {
+            const request = await fetch("/excluircidade", {
+                method: "POST",
+                headers: new Headers({ "content-type": "application/json" }),
+                body: JSON.stringify({
+                    idCIDADE: document.querySelector(".idcidade").value
+                })
+            })
+            const data = await request.json()
+        }
+    </script>
+    </script>
+</body>
+
+</html>

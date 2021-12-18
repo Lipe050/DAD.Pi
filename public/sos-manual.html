@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="main.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap" rel="stylesheet">
+    <title>SOS</title>
+</head>
+
+<body>
+    <div id="show-page">
+        <h1>Dangerous Animals Detector</h1>
+    </div>
+    <div id="coisa">
+        <main>
+            <div class="conteiner">
+                <h2>SOS</h2>
+                <p>Insira os dados para envio do SOS</p>
+                <form action="webcomponents/login/component.ts" method="post" id="form-validar">
+                    <input class="localizacao-sos" type="text" placeholder="Localização">
+                    <input class="situacao-vitima" type="text" placeholder="Situação da vítmia">
+                    <input class="animal" type="text" placeholder="Animal">
+                    <input class="carac-animal" type="text" placeholder="Características do animal">
+                    <input id="btn" type="button" onclick="return cadastrarsos()" name="go" value="Denunciar">
+                </form>
+            </div>
+
+        </main>
+    </div>
+</body>
+
+</html>

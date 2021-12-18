@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="main.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap" rel="stylesheet">
+    <title>SOS</title>
+</head>
+
+<body>
+    <div id="show-page">
+        <h1>Dangerous Animals Detector</h1>
+    </div>
+    <div id="coisa">
+        <main>
+            <div class="conteiner">
+                <h2>SOS</h2>
+                <p>Você autoriza a utilização do serviço de GPS do seu dispositivo?</p>
+                <form action="webcomponents/login/component.ts" method="post" id="form-validar">
+                    <input id="btn" type="button" onclick="return localgps()" name="go" value="SIM">
+                    <a href="sos-manual.html"><button>NÃO</button></a>
+                </form>
+            </div>
+
+        </main>
+    </div>
+</body>
+
+</html>

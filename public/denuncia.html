@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="main.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap" rel="stylesheet">
+    <title>Denúncia</title>
+</head>
+
+<body>
+    <div id="show-page">
+        <h1>Dangerous Animals Detector</h1>
+    </div>
+    <div id="coisa">
+        <main>
+            <div class="conteiner">
+                <h2>Denúncia</h2>
+                <p>Insira os dados para registrar sua denúncia.</p>
+                <form action="webcomponents/login/component.ts" method="post" id="form-validar">
+                    <input class="localizacao-denuncia" type="text" placeholder="Localização">
+                    <input class="descricao-denuncia" type="text" placeholder="Descrição...">
+                    <p>Selecione se sua denúncia será anônima ou identificada.</p>
+                    <select name="estados-brasil">
+                        <option value="Anonima">Anônima</option>
+                        <option value="Identificada">Identificada</option>
+                    </select>
+                    <input id="btn" type="button" onclick="return cadastrardenuncia()" name="go" value="Denunciar">
+                </form>
+            </div>
+        </main>
+    </div>
+    <script>
+        async function cadastrardenuncia() {
+            const request = await fetch("/cadastrardenuncia", {
+                method: "POST",
+                headers: new Headers({ "content-type": "application/json" }),
+                body: JSON.stringify({
+                    data: document.querySelector(".data").value,
+                    hora: document.querySelector(".hora").value,
+                    localizacao: document.querySelector(".localizacao").value,
+                    texto: document.querySelector(".texto").value
+                })
+            })
+            const data = await request.json()
+        }
+    </script>
+</body>
+
+</html>

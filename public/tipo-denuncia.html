@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="main.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap" rel="stylesheet">
+    <title>Tipo de Denúncia</title>
+</head>
+
+<body>
+    <div id="show-page">
+        <h1>Dangerous Animals Detector</h1>
+    </div>
+    <div id="coisa">
+        <main>
+            <div class="conteiner">
+                <h2>Tipo de Denúncia</h2>
+                <p>Insira os dados para cadastrar um tipo de denúncia vinculao à um órgão.</p>
+                <form action="webcomponents/login/component.ts" method="post" id="cad-animal">
+                    <input class="descricao" type="text" placeholder="Descrição">
+                    <input id="btn" type="button" onclick="return tipodenuncia()" name="go" value="Cadastrar">
+                </form>
+            </div>
+        </main>
+    </div>
+    <script>
+        async function tipodenuncia() {
+            const request = await fetch("/tipodenuncia", {
+                method: "POST",
+                headers: new Headers({ "content-type": "application/json" }),
+                body: JSON.stringify({
+                    descricao: document.querySelector(".descricao").value
+                })
+            })
+            const data = await request.json()
+
+        }
+    </script>
+</body>
+
+</html>

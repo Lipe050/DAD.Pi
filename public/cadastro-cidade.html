@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="main.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap" rel="stylesheet">
+    <title>Cadastro de Cidade</title>
+</head>
+
+<body>
+    <div id="show-page">
+        <h1>Dangerous Animals Detector</h1>
+    </div>
+    <div id="coisa">
+        <main>
+            <div class="conteiner">
+                <h2>Cadastro de Cidade</h2>
+                <p>Insira os dados para cadastrar uma cidade no sistema</p>
+                <form action="webcomponents/login/component.ts" method="post" id="cad-cidade">
+                    <input class="nome" type="text" placeholder="Nome">
+                    <input class="uf" type="text" placeholder="UF">
+                    <a href="confirmacao-cadastro.html"><input id="btn" type="button" onclick="return cadastrarcidade()"
+                            name="go" value="Cadastrar"></a>
+                </form>
+            </div>
+        </main>
+    </div>
+    <script>
+        async function cadastrarcidade() {
+            const request = await fetch("/cadastrarcidade", {
+                method: "POST",
+                headers: new Headers({ "content-type": "application/json" }),
+                body: JSON.stringify({
+                    nome: document.querySelector(".nome").value,
+                    uf: document.querySelector(".uf").value
+                })
+            })
+            const data = await request.json()
+
+        }
+    </script>
+</body>
+
+</html>

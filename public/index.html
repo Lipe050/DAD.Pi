@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="main.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap" rel="stylesheet">
+    <title>Homepage</title>
+</head>
+
+<body>
+    <div id="show-page">
+        <h1>Dangerous Animals Detector</h1>
+    </div>
+    <div id="coisa">
+        <main>
+            <div class="conteiner">
+                <h2>Bem vindo de volta!</h2>
+                <p>Insira seus dados para acessar a plataforma.</p>
+                <form action="webcomponents/login/component.ts" method="post" id="form-validar">
+                    <input class="Email" type="text" placeholder="Email">
+                    <br>
+                    <input class="Senha" type="password" placeholder="Senha">
+                    <input id="btn" type="button" onclick="return validar()" name="go" value="Entrar">
+                </form>
+                <a href="cadastro.html"><button id="cadastro">Não possui conta? Clique
+                        aqui!</button></a>
+                <a href="confirmacao.html"><button id="confirmar">Pular esta etapa >></button></a>
+            </div>
+        </main>
+    </div>
+    <script>
+        async function validar() {
+            const request = await fetch("/login", {
+                method: "POST",
+                headers: new Headers({ "content-type": "application/json" }),
+                body: JSON.stringify({
+                    email: document.querySelector(".Email").value,
+                    senha: document.querySelector(".Senha").value
+                })
+            })
+            const data = await request.json()
+
+            location.href = "usuario-" + data[0].tipo + ".html"
+        }
+    </script>
+</body>
+
+</html>
