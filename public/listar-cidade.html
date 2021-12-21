@@ -17,8 +17,8 @@
     <div id="coisa">
         <main>
             <div class="conteiner">
-                <h2>Cadastro</h2>
-                <p>Insira seus dados para se cadastrar na plataforma.</p>
+                <h2>Alterações e Exclusões</h2>
+                <p>Selecione as opções para realizar uma alteração ou exclusão de dados da plataforma.</p>
                 <form action="webcomponents/login/component.ts" method="post" id="form-cadastro">
                     <select name="estados-brasil">
                         <option value="Estado">Estado</option>
@@ -53,9 +53,8 @@
                     <select class="cidade" name="idcidade">
                         <option value="">Selecione o estado primeiro</option>
                     </select>
-                    <!--a href="confirmacao-cadastro.html"--><input id="btn" type="button"
-                        onclick="return excluircidade()" name="go" value="Excluir">
-                    <!--/a-->
+                    <button id="btn" type="button" onclick="return excluircidade()" name="go">Excluir</button>
+                    <button id="btn" type="button" onclick="return alterarcidade()" name="altera">Alterar</button>
                 </form>
             </div>
 
@@ -87,10 +86,39 @@
                 method: "POST",
                 headers: new Headers({ "content-type": "application/json" }),
                 body: JSON.stringify({
-                    idCIDADE: document.querySelector(".idcidade").value
+                    idCIDADE: document.querySelector(".cidade").value
                 })
             })
             const data = await request.json()
+
+            // MENSAGENS DE ERRO
+            if (request.status != 200) {
+                if (request.status == 401) {
+                    alert("Não autorizado: " + data);
+                    return
+                }
+
+                if (request.status == 500) {
+                    alert("Internal server error: " + data.error);
+                    return
+                }
+
+                return
+            }
+
+            if (data.changes <= 0) {
+                alert("Nenhuma alteração feita!")
+                return
+            }
+
+            alert("Cidade excluída com sucesso!")
+            location.reload() // RECARREGA A TELA
+        }
+
+        // AQUI SERÁ CHAMADA A TELA DE CADASTRO PARA PERMITIR A ALTERAÇÃO
+        // É PASSADO O IDCIDADE COMO PARÂMETRO
+        async function alterarcidade() {
+            location.href = "/cadastro-cidade.html?cidade=" + document.querySelector("select.cidade").value
         }
     </script>
     </script>

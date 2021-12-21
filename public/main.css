@@ -22,6 +22,7 @@ main {
     font-family: 'Readex Pro', sans-serif;
     margin-left: 50vh;
     text-align: center;
+    transition: .5s;
 }
 
 #show-page {

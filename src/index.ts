@@ -77,8 +77,34 @@ void async function () {
         }
     )
 
+    // PUT = ALTERAÇÃO
+    app.put('/cadastrarcidade',
+        async function (request, response) {
 
+            const ses: any = request.session
+            if (!ses.user) {
+                response.status(401); // Not Found
+                response.json({ error: "Senha ou email incorreto" });
+                return
+            }
 
+            const responseData = await db.run("UPDATE cidade SET nome=:nome, uf=:uf WHERE idCIDADE = :idCIDADE",
+                {
+                    ":idCIDADE": request.body.idCIDADE,
+                    ":nome": request.body.nome,
+                    ":uf": request.body.uf
+                })
+
+            console.log({
+                ":nome": request.body.nome,
+                ":uf": request.body.uf
+            })
+
+            response.json(responseData)
+        }
+    )
+
+    // POST = INCLUSÃO
     app.post('/cadastrarcidade',
         async function (request, response) {
 
@@ -105,27 +131,55 @@ void async function () {
         }
     )
 
+    // AQUI, CONSULTA-SE UMA CIDADE PELO SEU IDCIDADE
+    app.get('/buscar-dados-cidade/:idCIDADE',
+        async function (request, response) {
+            try {
+                const responseData = await db.get("SELECT * FROM cidade WHERE idCIDADE = :idCIDADE", {
+                    ":idCIDADE": request.params.idCIDADE
+                })
+                response.json(responseData)
+            } catch (e) {
+                response.status(500)
+                response.json({
+                    error: "Internal server error"
+                })
+            }
+        }
+    )
+
     app.post('/excluircidade',
         async function (request, response) {
-
             const ses: any = request.session
             if (!ses.user) {
-                response.status(401); // Not Found
-                response.json({ error: "Senha ou email incorreto" });
+                response.status(401); // NÃO AUTORIZADO "NOT ATHORIZED"
+                response.json({ error: "Humm, algo está errado. Verifique sua senha e email." });
                 return
             }
 
+            // UTILIZANDO TRY-CATCH PARA TRATAMENTO DE ERROS
+            try {
+                const responseData = await db.run(
+                    "DELETE FROM cidade WHERE idCIDADE = :idCIDADE",
+                    {
+                        ":idCIDADE": request.body.idCIDADE
+                    }
+                )
 
-            const responseData = await db.run("DELETE FROM cidade (idCIDADE) WHERE idCIDADE=:idCIDADE",
-                {
+                console.log({
                     ":idCIDADE": request.body.idCIDADE
                 })
 
-            console.log({
-                ":idCIDADE": request.body.idCIDADE
-            })
+                response.json(responseData)
 
-            response.json(responseData)
+            } catch (e) { // CASO OCORRA ERRO NO BANCO DE DADOS, SERÁ EXIBIDA ESTA MENSAGEM
+                response.status(500)
+                response.json({
+                    error: "Internal server error",
+                    detail: e
+                })
+                return
+            }
         }
     )
 
