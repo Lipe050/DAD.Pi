@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="main.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap" rel="stylesheet">
+    <title>Listagem de Cidade</title>
+</head>
+
+<body>
+    <div id="show-page">
+        <h1>Dangerous Animals Detector</h1>
+    </div>
+    <div id="coisa">
+        <main>
+            <div class="conteiner">
+                <h2>Alterações e Exclusões</h2>
+                <p>Selecione as opções para realizar uma alteração ou exclusão de dados da plataforma.</p>
+                <form action="webcomponents/login/component.ts" method="post" id="form-cadastro">
+                    <input class="nome-cientifico" type="text" placeholder="Nome Científico" name="nome-cientifico">
+                    <button id="btn" type="button" onclick="return excluiranimal()" name="go">Excluir</button>
+                    <button id="btn" type="button" onclick="return alteraranimal()" name="altera">Alterar</button>
+                </form>
+            </div>
+
+        </main>
+    </div>
+    <script>
+    //    const inputNomeCientifico = document.querySelector('.nome-cientifico').value
+    //
+    //    inputNomeCientifico.addEventListener("change", async ev => {
+    //        // const nomecientifico = inputNomeCientifico.options[inputNomeCientifico.selectedIndex].value
+    //        const request = await fetch("/animal/" + nomecientifico)
+    //        const data = await request.json()
+    //
+    //        if (!data.length) {
+    //            inputNomeCientifico.innerHTML = 'Nenhum animal encontrado para este nome'
+    //            return
+    //        }
+    //
+    //        let strHtmlAnimal = ""
+    //        data.forEach(animal => {
+    //            strHtmlAnimal += `<option value="${animal.idANIMAL}">${animal.nomecientifico}</option>`
+    //        });
+    //        inputNomeCientifico.innerHTML = strHtmlAnimal
+    //    })
+
+        async function excluiranimal() {
+            const request = await fetch("/excluiranimal", {
+                method: "POST",
+                headers: new Headers({ "content-type": "application/json" }),
+                body: JSON.stringify({
+                    nomecientifico: document.querySelector(".nome-cientifico").value
+                })
+            })
+            const data = await request.json()
+
+            // MENSAGENS DE ERRO
+            if (request.status != 200) {
+                if (request.status == 401) {
+                    alert("Não autorizado: " + data);
+                    return
+                }
+
+                if (request.status == 500) {
+                    alert("Internal server error: " + data.error);
+                    return
+                }
+
+                return
+            }
+
+            if (data.changes <= 0) {
+                alert("Nenhuma alteração feita!")
+                return
+            }
+
+            alert("Animal excluído com sucesso!")
+            location.reload() // RECARREGA A TELA
+        }
+
+        // AQUI SERÁ CHAMADA A TELA DE CADASTRO PARA PERMITIR A ALTERAÇÃO
+        async function alteraranimal() {
+            location.href = "/cadastro-animal.html?nomecientifico=" + document.querySelector(".nome-cientifico").value
+        }
+    </script>
+    </script>
+</body>
+
+</html>
