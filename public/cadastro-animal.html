@@ -19,24 +19,45 @@
             <div class="conteiner">
                 <h2>Cadastro</h2>
                 <p>Insira os dados do animal para registro.</p>
-                <form action="webcomponents/login/component.ts" method="post" id="cad-animal">
-                    <input class="nome-cientifico" type="text" placeholder="Nome Científico">
-                    <input class="nome-popular" type="text" placeholder="Nomes Populares">
-                    <input class="habitat" type="text" placeholder="Habitat">
-                    <input class="pot-veneno" type="text" placeholder="Potência do Veneno">
-                    <input class="procedencia" id="procedencia" type="text" placeholder="Procedência">
-                    <a href="confirmacao-cadastro.html"><input id="btn" type="button" onclick="return cadastraranimal()"
-                            name="go" value="Cadastrar"></a>
-                </form>
+                <input class="nome-cientifico" type="text" placeholder="Nome Científico">
+                <input class="nome-popular" type="text" placeholder="Nomes Populares">
+                <input class="habitat" type="text" placeholder="Habitat">
+                <input class="pot-veneno" type="text" placeholder="Potência do Veneno">
+                <input class="procedencia" id="procedencia" type="text" placeholder="Procedência">
+                <a href="confirmacao-cadastro.html"><input id="btn" type="button" onclick="return cadastraranimal()"
+                        name="go" value="Salvar"></a>
+                <a href="exc-alt-animal.html"><button>Exlcuir ou alterar</button></a>
             </div>
         </main>
     </div>
     <script>
+        const params = new URLSearchParams(document.location.search)
+        
+        // PEGA O PARAMETRO NOME-CIENTIFICO DO ANIMAL
+        const prevNomeCientifico = params.get("nomecientifico")
+        var prevIdANIMAL = null
+
+        // VERIFICANDO SE VEIO O NOME-CIENTIFICO PARA ALTERACAO
+        void async function() {
+            if (prevNomeCientifico !== null) {
+                // alert(prevNomeCientifico)
+                const request = await fetch("/buscar-animal/" + prevNomeCientifico)
+                const requestData = await request.json()
+                prevIdANIMAL = requestData.idANIMAL, // alert(requestData.nome_cientifico),
+                document.querySelector(".nome-cientifico").value = requestData.nome_cientifico,
+                document.querySelector(".nome-popular").value = requestData.nome_popular,
+                document.querySelector(".habitat").value = requestData.habitat,
+                document.querySelector(".pot-veneno").value = requestData.pot_veneno,
+                document.querySelector(".procedencia").value = requestData.procedencia
+            }
+        }();
+
         async function cadastraranimal() {
-            const request = await fetch("/cadastraranimal", {
-                method: "POST",
+            const request = await fetch("/cadastraranimal", { // CHAMA CADASTRAR ANIMAL
+                method: prevNomeCientifico ? "PUT" : "POST", // PUT > ALTERAÇÃO - POST > INCLUSÃO
                 headers: new Headers({ "content-type": "application/json" }),
                 body: JSON.stringify({
+                    idANIMAL: prevIdANIMAL ?? null,   
                     nome_cientifico: document.querySelector(".nome-cientifico").value,
                     nome_popular: document.querySelector(".nome-popular").value,
                     habitat: document.querySelector(".habitat").value,

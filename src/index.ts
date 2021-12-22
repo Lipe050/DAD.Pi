@@ -20,7 +20,7 @@ void async function () {
         }
     }))
 
-    app.use('/pages', express.static('public'))
+    app.use(express.static('public'))
 
     app.post('/login',
         async function (request, response) {
@@ -74,6 +74,48 @@ void async function () {
             }
 
             response.json(responseData)
+        }
+    )
+
+    // EXCLUSÃO DE ORGÃO
+    app.post('/excluirorgoa',
+        async function (request, response) {
+            const ses: any = request.session
+            if (!ses.user) {
+                response.status(401); // NÃO AUTORIZADO "NOT ATHORIZED"
+                response.json({ error: "Humm, algo está errado. Verifique sua senha e email." });
+                return
+            }
+
+            // UTILIZANDO TRY-CATCH PARA TRATAMENTO DE ERROS
+            try {
+                const responseData = await db.run(
+                    "DELETE FROM orgao WHERE idORGAO = :idORGAO",
+                    {
+                        ":idORGAO": request.body.idORGAO,
+                        ":nome": request.body.nome,
+                        ":cidade": request.body.cidade,
+                        ":uf": request.body.uf
+                    }
+                )
+
+                console.log({
+                    ":idORGAO": request.body.idORGAO,
+                    ":nome": request.body.nome,
+                    ":cidade": request.body.cidade,
+                    ":uf": request.body.uf
+                })
+
+                response.json(responseData)
+
+            } catch (e) { // CASO OCORRA ERRO NO BANCO DE DADOS, SERÁ EXIBIDA ESTA MENSAGEM
+                response.status(500)
+                response.json({
+                    error: "Internal server error",
+                    detail: e
+                })
+                return
+            }
         }
     )
 
@@ -204,6 +246,11 @@ void async function () {
         }
     )
 
+    app.get("/animal/:nome_cientifico", async (req, res) => {
+        const responseData = await db.all("SELECT nome_cientifico, idANIMAL FROM animal WHERE nome_cientifico=:nome_cientifico", { ":nome_cientifico": req.params.nome_cientifico })
+        res.json(responseData)
+    })
+
     app.post('/cadastraranimal',
         async function (request, response) {
             const responseData = await db.all("INSERT INTO animal (nome_cientifico, nome_popular, habitat, pot_veneno, procedencia) VALUES (:nome_cientifico, :nome_popular, :habitat, :pot_veneno, :procedencia)",
@@ -230,6 +277,102 @@ void async function () {
             }
 
             response.json(responseData)
+        }
+    )
+
+    // EXCLUSÃO DE ANIMAL
+    app.post('/excluiranimal',
+        async function (request, response) {
+            const ses: any = request.session
+            if (!ses.user) {
+                response.status(401); // NÃO AUTORIZADO "NOT ATHORIZED"
+                response.json({ error: "Humm, algo está errado. Verifique sua senha e email." });
+                return
+            }
+
+            // UTILIZANDO TRY-CATCH PARA TRATAMENTO DE ERROS
+            try {
+                const responseData = await db.run(
+                    "DELETE FROM animal WHERE nome_cientifico = :nomecientifico",
+                    {
+                        ":nomecientifico": request.body.nomecientifico
+                    }
+                )
+
+                console.log({
+                    ":nomecientifico": request.body.nomecientifico
+                })
+
+                response.json(responseData)
+
+            } catch (e) { // CASO OCORRA ERRO NO BANCO DE DADOS, SERÁ EXIBIDA ESTA MENSAGEM
+                response.status(500)
+                response.json({
+                    error: "Internal server error",
+                    detail: e
+                })
+                return
+            }
+        }
+    )
+
+    // ALTERAÇÃO DE ANIMAL
+    app.put('/cadastraranimal',
+        async function (request, response) {
+
+            const ses: any = request.session
+            if (!ses.user) {
+                response.status(401); // Not Found
+                response.json({ error: "Senha ou email incorreto" });
+                return
+            }
+
+            console.log({
+                ":idANIMAL": request.body.idANIMAL,
+                ":nome_cientifico": request.body.nome_cientifico,
+                ":nome_popular": request.body.nome_popular,
+                ":habitat": request.body.habitat,
+                ":pot_veneno": request.body.pot_veneno,
+                ":procedencia": request.body.procedencia,
+            })
+
+            const responseData = await db.run("UPDATE animal SET nome_cientifico=:nome_cientifico, nome_popular=:nome_popular, habitat=:habitat, pot_veneno=:pot_veneno, procedencia=:procedencia WHERE idANIMAL = :idANIMAL",
+                {
+                    ":idANIMAL": request.body.idANIMAL,
+                    ":nome_cientifico": request.body.nome_cientifico,
+                    ":nome_popular": request.body.nome_popular,
+                    ":habitat": request.body.habitat,
+                    ":pot_veneno": request.body.pot_veneno,
+                    ":procedencia": request.body.procedencia,
+                })
+
+            console.log({
+                ":idANIMAL": request.body.idANIMAL,
+                ":nome_cientifico": request.body.nome_cientifico,
+                ":nome_popular": request.body.nome_popular,
+                ":habitat": request.body.habitat,
+                ":pot_veneno": request.body.pot_veneno,
+                ":procedencia": request.body.procedencia,
+            })
+
+            response.json(responseData)
+        }
+    )
+
+    // AQUI, CONSULTA-SE UMA CIDADE PELO SEU IDCIDADE
+    app.get('/buscar-animal/:nomecientifico',
+        async function (request, response) {
+            try {
+                const responseData = await db.get("SELECT * FROM animal WHERE nome_cientifico = :nomecientifico", {
+                    ":nomecientifico": request.params.nomecientifico
+                })
+                response.json(responseData)
+            } catch (e) {
+                response.status(500)
+                response.json({
+                    error: "Animal: Erro no BD"
+                })
+            }
         }
     )
 
