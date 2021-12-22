@@ -19,17 +19,32 @@
             <div class="conteiner">
                 <h2>Tipo de Denúncia</h2>
                 <p>Insira os dados para cadastrar um tipo de denúncia vinculao à um órgão.</p>
-                <form action="webcomponents/login/component.ts" method="post" id="cad-animal">
-                    <input class="descricao" type="text" placeholder="Descrição">
-                    <input id="btn" type="button" onclick="return tipodenuncia()" name="go" value="Cadastrar">
-                </form>
+                <input class="descricao" type="text" placeholder="Descrição">
+                <input id="btn" type="button" onclick="return tipodenuncia()" name="go" value="Cadastrar">
+                <a href="exc-alt-tipodenuncia.html"><button>Exclusão ou Alteração</button></a>
             </div>
         </main>
     </div>
     <script>
+        const params = new URLSearchParams(document.location.search)
+
+        // PEGA O PARAMETRO NOME DO ORGAO
+        const prevDescricao = params.get("descricao")
+        var prevIdTipoDenuncia = null
+
+        // VERIFICANDO SE VEIO O NOME PARA ALTERACAO
+        void async function () {
+            if (prevIdTipoDenuncia !== null) {
+                const request = await fetch("/buscar-orgao/" + prevIdTipoDenuncia)
+                const requestData = await request.json()
+                prevIdTipoDenuncia = requestData.idTIPODENUNCIA
+                document.querySelector(".descricao").value = requestData.descricao
+            }
+        }();
+
         async function tipodenuncia() {
             const request = await fetch("/tipodenuncia", {
-                method: "POST",
+                method: "POST", // PUT > ALTERAÇÃO - POST > INCLUSÃO
                 headers: new Headers({ "content-type": "application/json" }),
                 body: JSON.stringify({
                     descricao: document.querySelector(".descricao").value

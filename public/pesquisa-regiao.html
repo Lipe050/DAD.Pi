@@ -18,41 +18,18 @@
         <main>
             <div class="conteiner">
                 <h2>Pesquisa por região</h2>
-                <p>Selecione um estado para ver os animais existem na região.</p>
-                <form method="post" id="form-validar">
-                    <select name="estados-brasil">
-                        <option value="AC">Acre</option>
-                        <option value="AL">Alagoas</option>
-                        <option value="AP">Amapá</option>
-                        <option value="AM">Amazonas</option>
-                        <option value="BA">Bahia</option>
-                        <option value="CE">Ceará</option>
-                        <option value="DF">Distrito Federal</option>
-                        <option value="ES">Espírito Santo</option>
-                        <option value="GO">Goiás</option>
-                        <option value="MA">Maranhão</option>
-                        <option value="MT">Mato Grosso</option>
-                        <option value="MS">Mato Grosso do Sul</option>
-                        <option value="MG">Minas Gerais</option>
-                        <option value="PA">Pará</option>
-                        <option value="PB">Paraíba</option>
-                        <option value="PR">Paraná</option>
-                        <option value="PE">Pernambuco</option>
-                        <option value="PI">Piauí</option>
-                        <option value="RJ">Rio de Janeiro</option>
-                        <option value="RN">Rio Grande do Norte</option>
-                        <option value="RS">Rio Grande do Sul</option>
-                        <option value="RO">Rondônia</option>
-                        <option value="RR">Roraima</option>
-                        <option value="SC">Santa Catarina</option>
-                        <option value="SP">São Paulo</option>
-                        <option value="SE">Sergipe</option>
-                        <option value="TO">Tocantins</option>
-                    </select>
-                    <input id="btn" type="button" onclick="return animaisregiao()" name="go" value="Pesquisar">
-                </form>
+                <p>Selecione um bioma para ver os animais presentes.</p>
+                <select name="biomas-brasil">
+                    <option value="Amazonia">Amazonia</option>
+                    <option value="AP">Cerrado</option>
+                    <option value="AM">Caatinga</option>
+                    <option value="BA">Pantanal</option>
+                    <option value="CE">Mata Atlântica</option>
+                    <option value="DF">Pampa</option>
+                </select>
+                <input id="btn" type="button" onclick="return animaisregiao()" name="go" value="Pesquisar">
+                <a href="biomas-brasil.html"><button>Não sei meu bioma &#129300</button></a>
             </div>
-
         </main>
     </div>
 </body>
