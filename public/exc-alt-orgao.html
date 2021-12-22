@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap" rel="stylesheet">
-    <title>Listagem de Cidade</title>
+    <title>Exclusão ou Alteração</title>
 </head>
 
 <body>
@@ -23,38 +23,19 @@
                     <input class="nome" type="text" placeholder="Nome" name="nome">
                     <button id="btn" type="button" onclick="return excluirorgao()" name="go">Excluir</button>
                     <button id="btn" type="button" onclick="return alterarorgao()" name="altera">Alterar</button>
+                    <a href="usuario-0.html"><button>Home</button></a>
                 </form>
             </div>
 
         </main>
     </div>
     <script>
-        const inputNome = document.querySelector("[name='nome']")
-
-        inputNome.addEventListener("change", async ev => {
-            const nome = inputNome.options[inputNome.selectedIndex].value
-            const request = await fetch("/orgao/" + nome)
-            const data = await request.json()
-
-            if (!data.length) {
-                alert("Nenhum orgão encontrado")
-                inputNome.innerHTML = '<option value="">Nenhum animal encontrado para este nome</option>'
-                return
-            }
-
-            let strHtmlOrgao = ""
-            data.forEach(animal => {
-                strHtmlOrgao += `<option value="${orgao.idORGAO}">${orgao.nome}</option>`
-            });
-            inputNome.innerHTML = strHtmlOrgao
-        })
-
         async function excluirorgao() {
             const request = await fetch("/excluirorgao", {
                 method: "POST",
                 headers: new Headers({ "content-type": "application/json" }),
                 body: JSON.stringify({
-                    idORGAO: document.querySelector(".nome").value
+                    nome: document.querySelector(".nome").value
                 })
             })
             const data = await request.json()
@@ -62,7 +43,7 @@
             // MENSAGENS DE ERRO
             if (request.status != 200) {
                 if (request.status == 401) {
-                    alert("Não autorizado: " + data);
+                    alert("O que você está tentando aprontar hein ? &#129300: " + data);
                     return
                 }
 
@@ -79,14 +60,14 @@
                 return
             }
 
-            alert("Animal excluído com sucesso!")
+            alert("Órgão excluído com sucesso!")
             location.reload() // RECARREGA A TELA
         }
 
         // AQUI SERÁ CHAMADA A TELA DE CADASTRO PARA PERMITIR A ALTERAÇÃO
         // É PASSADO O IDCIDADE COMO PARÂMETRO
-        async function alteraranimal() {
-            location.href = "/cadastro-cidade.html?cidade=" + document.querySelector("select.cidade").value
+        async function alterarorgao() {
+            location.href = "/cadastro-orgao.html?nome=" + document.querySelector(".nome").value
         }
     </script>
     </script>

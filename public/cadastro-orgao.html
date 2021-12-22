@@ -19,21 +19,37 @@
             <div class="conteiner">
                 <h2>Cadastro de Órgão</h2>
                 <p>Insira os dados para cadastrar um órgão.</p>
-                <form action="webcomponents/login/component.ts" method="post" id="cad-animal">
-                    <input class="nome" type="text" placeholder="Nome">
-                    <input class="cidade" type="text" placeholder="Cidade">
-                    <input class="uf" type="text" placeholder="UF">
-                    <a href="confirmacao-cadastro.html"><input id="btn" type="button" onclick="return cadastrarorgao()"
-                            name="go" value="Cadastrar"></a>
-                    <a href="exc-alt-orgao.html"><button>Excluir ou alterar</button></a>
-                </form>
+                <input class="nome" type="text" placeholder="Nome">
+                <input class="cidade" type="text" placeholder="Cidade">
+                <input class="uf" type="text" placeholder="UF">
+                <a href="confirmacao-cadastro.html"><input id="btn" type="button" onclick="return cadastrarorgao()"
+                        name="go" value="Cadastrar"></a>
+                <a href="exc-alt-orgao.html"><button>Excluir ou alterar</button></a>
             </div>
         </main>
     </div>
     <script>
+        const params = new URLSearchParams(document.location.search)
+
+        // PEGA O PARAMETRO NOME DO ORGAO
+        const prevNome = params.get("nome")
+        var prevIdORGAO = null
+
+        // VERIFICANDO SE VEIO O NOME PARA ALTERACAO
+        void async function () {
+            if (prevNome !== null) {
+                const request = await fetch("/buscar-orgao/" + prevNome)
+                const requestData = await request.json()
+                prevIdORGAO = requestData.idORGAO
+                document.querySelector(".nome").value = requestData.nome,
+                    document.querySelector(".cidade").value = requestData.cidade,
+                    document.querySelector(".uf").value = requestData.uf
+            }
+        }();
+
         async function cadastrarorgao() {
-            const request = await fetch("/cadastrarorgao", {
-                method: "POST",
+            const request = await fetch("/cadastrarorgao", { // CHAMA O CADASTRO DE ORGAO
+                method: prevNome ? "PUT" : "POST", // PUT > ALTERAÇÃO - POST > INCLUSÃO
                 headers: new Headers({ "content-type": "application/json" }),
                 body: JSON.stringify({
                     nome: document.querySelector(".nome").value,

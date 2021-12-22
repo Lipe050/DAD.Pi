@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap" rel="stylesheet">
-    <title>Listagem de Cidade</title>
+    <title>Exclusão ou Alteração</title>
 </head>
 
 <body>
@@ -23,31 +23,13 @@
                     <input class="nome-cientifico" type="text" placeholder="Nome Científico" name="nome-cientifico">
                     <button id="btn" type="button" onclick="return excluiranimal()" name="go">Excluir</button>
                     <button id="btn" type="button" onclick="return alteraranimal()" name="altera">Alterar</button>
+                    <a href="usuario-0.html"><button>Home</button></a>
                 </form>
             </div>
 
         </main>
     </div>
     <script>
-    //    const inputNomeCientifico = document.querySelector('.nome-cientifico').value
-    //
-    //    inputNomeCientifico.addEventListener("change", async ev => {
-    //        // const nomecientifico = inputNomeCientifico.options[inputNomeCientifico.selectedIndex].value
-    //        const request = await fetch("/animal/" + nomecientifico)
-    //        const data = await request.json()
-    //
-    //        if (!data.length) {
-    //            inputNomeCientifico.innerHTML = 'Nenhum animal encontrado para este nome'
-    //            return
-    //        }
-    //
-    //        let strHtmlAnimal = ""
-    //        data.forEach(animal => {
-    //            strHtmlAnimal += `<option value="${animal.idANIMAL}">${animal.nomecientifico}</option>`
-    //        });
-    //        inputNomeCientifico.innerHTML = strHtmlAnimal
-    //    })
-
         async function excluiranimal() {
             const request = await fetch("/excluiranimal", {
                 method: "POST",

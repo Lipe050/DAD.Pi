@@ -47,8 +47,8 @@ void async function () {
         }
     )
 
-    app.get("/cidades/:uf", async (req, res) => {
-        const responseData = await db.all("SELECT idCIDADE, nome FROM cidade WHERE uf=:uf", { ":uf": req.params.uf })
+    app.get("/orgao/:nome", async (req, res) => {
+        const responseData = await db.all("SELECT nome, idORGAO FROM orgao WHERE nome=:nome", { ":nome": req.params.nome })
         res.json(responseData)
     })
 
@@ -78,7 +78,7 @@ void async function () {
     )
 
     // EXCLUSÃO DE ORGÃO
-    app.post('/excluirorgoa',
+    app.post('/excluirorgao',
         async function (request, response) {
             const ses: any = request.session
             if (!ses.user) {
@@ -90,20 +90,14 @@ void async function () {
             // UTILIZANDO TRY-CATCH PARA TRATAMENTO DE ERROS
             try {
                 const responseData = await db.run(
-                    "DELETE FROM orgao WHERE idORGAO = :idORGAO",
+                    "DELETE FROM orgao WHERE nome = :nome",
                     {
-                        ":idORGAO": request.body.idORGAO,
                         ":nome": request.body.nome,
-                        ":cidade": request.body.cidade,
-                        ":uf": request.body.uf
                     }
                 )
 
                 console.log({
-                    ":idORGAO": request.body.idORGAO,
-                    ":nome": request.body.nome,
-                    ":cidade": request.body.cidade,
-                    ":uf": request.body.uf
+                    ":nome": request.body.nome
                 })
 
                 response.json(responseData)
@@ -118,6 +112,48 @@ void async function () {
             }
         }
     )
+
+    // ALTERAÇÃO DE ORGAO
+    app.put('/cadastrarorgao',
+        async function (request, response) {
+
+            const ses: any = request.session
+            if (!ses.user) {
+                response.status(401); // Not Found
+                response.json({ error: "Senha ou email incorreto" });
+                return
+            }
+
+            console.log({
+                ":idORGAO": request.body.idORGAO,
+                ":nome": request.body.nome,
+                ":cidade": request.body.cidade,
+                ":uf": request.body.uf,
+            })
+
+            const responseData = await db.run("UPDATE orgao SET nome=:nome, cidade=:cidade, uf=:uf WHERE idORGAO = :idORGAO",
+                {
+                    ":idORGAO": request.body.idORGAO,
+                    ":nome": request.body.nome,
+                    ":cidade": request.body.cidade,
+                    ":uf": request.body.uf,
+                })
+
+            console.log({
+                ":idORGAO": request.body.idORGAO,
+                ":nome": request.body.nome,
+                ":cidade": request.body.cidade,
+                ":uf": request.body.uf,
+            })
+
+            response.json(responseData)
+        }
+    )
+
+    app.get("/cidades/:uf", async (req, res) => {
+        const responseData = await db.all("SELECT idCIDADE, nome FROM cidade WHERE uf=:uf", { ":uf": req.params.uf })
+        res.json(responseData)
+    })
 
     // PUT = ALTERAÇÃO
     app.put('/cadastrarcidade',
@@ -375,6 +411,11 @@ void async function () {
             }
         }
     )
+
+    app.get("/usuario/:idUSUARIO", async (req, res) => {
+        const responseData = await db.all("SELECT idUSUARIO FROM usuario WHERE idUSUARIO=:idUSUARIO", { ":idUSUARIO": req.params.idUSUARIO })
+        res.json(responseData)
+    })
 
     app.post('/cadastrarusuario',
         async function (request, response) {
