@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="main.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap" rel="stylesheet">
+    <title>Exclusão ou Alteração</title>
+</head>
+
+<body>
+    <div id="show-page">
+        <h1>Dangerous Animals Detector</h1>
+    </div>
+    <div id="coisa">
+        <main>
+            <div class="conteiner">
+                <h2>Alterações e Exclusões</h2>
+                <p>Selecione as opções para realizar uma alteração ou exclusão de dados da plataforma.</p>
+                <form action="webcomponents/login/component.ts" method="post" id="form-cadastro">
+                    <input class="descricao" type="text" placeholder="Descrição" name="descricao">
+                    <button id="btn" type="button" onclick="return excluirtipodenuncia()" name="go">Excluir</button>
+                    <button id="btn" type="button" onclick="return alterartipodenuncia()" name="altera">Alterar</button>
+                    <a href="usuario-0.html"><button>Home</button></a>
+                </form>
+            </div>
+
+        </main>
+    </div>
+    <script>
+        async function excluirtipodenuncia() {
+            const request = await fetch("/excluirtipodenuncia", {
+                method: "POST",
+                headers: new Headers({ "content-type": "application/json" }),
+                body: JSON.stringify({
+                    descricao: document.querySelector(".descricao").value
+                })
+            })
+            const data = await request.json()
+
+            // MENSAGENS DE ERRO
+            if (request.status != 200) {
+                if (request.status == 401) {
+                    alert("O que você está tentando aprontar hein ? &#129300: " + data);
+                    return
+                }
+
+                if (request.status == 500) {
+                    alert("Internal server error: " + data.error);
+                    return
+                }
+
+                return
+            }
+
+            if (data.changes <= 0) {
+                alert("Nenhuma alteração feita!")
+                return
+            }
+
+            alert("Tipo de denúncia excluída com sucesso!")
+            location.reload() // RECARREGA A TELA
+        }
+
+        // AQUI SERÁ CHAMADA A TELA DE CADASTRO PARA PERMITIR A ALTERAÇÃO
+        // É PASSADO O IDCIDADE COMO PARÂMETRO
+        async function alterarorgao() {
+            location.href = "/tipo-denuncia.html?descricao=" + document.querySelector(".descricao").value
+        }
+    </script>
+    </script>
+</body>
+
+</html>

@@ -26,28 +26,13 @@
         </main>
     </div>
     <script>
-        const params = new URLSearchParams(document.location.search)
-
-        // PEGA O PARAMETRO NOME DO ORGAO
-        const prevDescricao = params.get("descricao")
-        var prevIdTipoDenuncia = null
-
-        // VERIFICANDO SE VEIO O NOME PARA ALTERACAO
-        void async function () {
-            if (prevIdTipoDenuncia !== null) {
-                const request = await fetch("/buscar-orgao/" + prevIdTipoDenuncia)
-                const requestData = await request.json()
-                prevIdTipoDenuncia = requestData.idTIPODENUNCIA
-                document.querySelector(".descricao").value = requestData.descricao
-            }
-        }();
-
-        async function tipodenuncia() {
-            const request = await fetch("/tipodenuncia", {
-                method: "POST", // PUT > ALTERAÇÃO - POST > INCLUSÃO
+        async function cadastrarcidade() {
+            const request = await fetch("/cadastrarcidade", {
+                method: "POST",
                 headers: new Headers({ "content-type": "application/json" }),
                 body: JSON.stringify({
-                    descricao: document.querySelector(".descricao").value
+                    nome: document.querySelector(".nome").value,
+                    uf: document.querySelector(".uf").value
                 })
             })
             const data = await request.json()
